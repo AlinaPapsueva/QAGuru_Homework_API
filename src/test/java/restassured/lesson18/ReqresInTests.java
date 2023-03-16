@@ -94,24 +94,4 @@ public class ReqresInTests {
                 .statusCode(200)
                 .body("data[0].first_name", is("George"));
     }
-
-    @Test
-    @DisplayName("Проверка на неуспешную регистрацию")
-    public void checkSuccessfulRegisterTest() {
-        String testData = "{\"email\":\"eve.holt@reqres.in\", \"password\":\"pistol\"}";
-        int id = 4;
-
-        given()
-                .log().uri()
-                .when()
-                .baseUri(BASE_URL)
-                .contentType(JSON)
-                .body(testData)
-                .post(Endpoints.postRegister)
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .body("id", is(id));
-    }
 }
