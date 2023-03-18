@@ -11,6 +11,24 @@ import static org.hamcrest.Matchers.is;
 public class ReqresInGroovyTest {
 
     @Test
+    @DisplayName("Проверка, что имя первого пользователя в списке пользователей - George")
+    @Tag("groovy")
+    void checkFirstNameInListUserPageUsingGroovyTest() {
+
+        step("Вызов эндпоинта users с query-параметром 1", () -> {
+            given(requestSpec)
+                    .when()
+                    .get("/users?page=1")
+                    .then()
+                    .log().status()
+                    .log().body()
+                    .statusCode(200)
+                    //.body("data[0].first_name", is("George"));
+                    .body("data.find{it.id == 1}.first_name", is ("George"));
+        });
+    }
+
+    @Test
     @DisplayName("Проверка на код 404, когда ресурс не найден")
     public void resourceNotFoundUsingGroovyTest() {
         step("Вызов GET с несуществующей страницей", () -> {
@@ -23,9 +41,8 @@ public class ReqresInGroovyTest {
         });
     }
 
-    @Tag("test_api_with_steps")
-    @DisplayName("Проверка на неуспешную регистрацию")
     @Test
+    @DisplayName("Проверка на неуспешную регистрацию")
     void unsuccessfulRegisterUsingGroovyTest() {
         step("Ввод email в поле для регистрации для неуспешной регистрации", () -> {
             UnsuccessfulModel unsuccessfulModel = new UnsuccessfulModel();
@@ -71,22 +88,6 @@ public class ReqresInGroovyTest {
                     .spec(responseSpec201)
                     .body("name", is("lina"))
                     .body("job", is("lina"));
-        });
-    }
-
-    @Test
-    @DisplayName("Проверка, что имя первого пользователя в списке пользователей - George")
-    void checkFirstNameInListUserPageUsingGroovyTest() {
-
-        step("Вызов эндпоинта users с query-параметром 1", () -> {
-            given(requestSpec)
-                    .when()
-                    .get("/users?page=1")
-                    .then()
-                    .log().status()
-                    .log().body()
-                    .statusCode(200)
-                    .body("data[0].first_name", is("George"));
         });
     }
 }
